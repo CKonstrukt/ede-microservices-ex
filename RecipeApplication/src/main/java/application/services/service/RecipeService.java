@@ -6,6 +6,7 @@ import application.services.model.RecipeIngredient;
 import application.services.repository.RecipeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -18,6 +19,9 @@ import java.util.UUID;
 public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final WebClient webClient;
+
+    @Value("${ingredientservice.baseurl}")
+    private String ingredientServiceBaseUrl;
 
     public void create(RecipeRequest recipeRequest) {
         Recipe recipe = Recipe.builder()
@@ -52,7 +56,7 @@ public class RecipeService {
     private RecipeIngredientResponse mapToRecipeIngredientResponse(RecipeIngredient recipeIngredient) {
         System.out.println(recipeIngredient.getCode());
         IngredientResponse ingredientResponse = webClient.get()
-                .uri("http://localhost:8082/api/ingredient", uriBuilder -> uriBuilder.queryParam("code", recipeIngredient.getCode()).build())
+                .uri(String.format("http://%s/api/ingredient", ingredientServiceBaseUrl), uriBuilder -> uriBuilder.queryParam("code", recipeIngredient.getCode()).build())
                 .retrieve()
                 .bodyToMono(IngredientResponse.class)
                 .block();

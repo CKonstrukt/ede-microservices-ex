@@ -1,0 +1,71 @@
+services:
+  mongo-user:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_user_data:/data/db
+
+  mongo-ingredient:
+    image: mongo:latest
+    ports:
+      - 27018:27017
+    volumes:
+      - mongodb_ingredient_data:/data/db
+
+  postgres-recipe:
+    image: postgres:16-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_recipe_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=recipedb
+
+  user-service:
+    depends_on:
+      - mongo-user
+    image: r0881427/user-service
+    ports:
+      - 8081:8081
+    links:
+      - mongo-user
+    environment:
+      DB_HOST: mongo-user
+      DB_PORT: 27017
+
+  ingredient-service:
+    depends_on:
+      - mongo-ingredient
+    image: r0881427/ingredient-service
+    ports:
+      - 8082:8082
+    links:
+      - mongo-ingredient
+    environment:
+      DB_HOST: mongo-ingredient
+      DB_PORT: 27018
+
+  recipe-service:
+    depends_on:
+      - postgres-recipe
+      - ingredient-service
+    image: r0881427/recipe-service
+    ports:
+      - 8080:8080
+    links:
+      - postgres-recipe
+      - ingredient-service
+    environment:
+      DB_HOST: postgres-recipe
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: secret
+      INGREDIENT_SERVICE_BASE_URL: ingredient-service:8082
+
+volumes:
+  mongodb_user_data:
+  mongodb_ingredient_data:
+  postgres_recipe_data:
