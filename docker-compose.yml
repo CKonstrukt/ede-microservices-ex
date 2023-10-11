@@ -67,17 +67,5 @@ services:
 
 volumes:
   mongodb_user_data:
-    driver_opts:
-      type: none
-      device: ../data/user
-      o: bind
   mongodb_ingredient_data:
-    driver_opts:
-      type: none
-      device: ../data/ingredient
-      o: bind
   postgres_recipe_data:
-    driver_opts:
-      type: none
-      device: ../data/recipe
-      o: bind
