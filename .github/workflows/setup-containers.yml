@@ -106,4 +106,4 @@ jobs:
         run: docker build -t ${{ secrets.DOCKER_USER }}/api-gateway:latest ./ApiGateway
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/ede-api-gateway:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/api-gateway:latest
