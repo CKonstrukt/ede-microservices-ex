@@ -83,7 +83,7 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USER }}/recipe-service:latest
   apigateway:
     runs-on: ubuntu-latest
-    name: Java 17 build, test, deliver ede-api-gateway container
+    name: Java 17 build, test, deliver api-gateway container
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -103,7 +103,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/ede-api-gateway:latest ./api-gateway
+        run: docker build -t ${{ secrets.DOCKER_USER }}/api-gateway:latest ./ApiGateway
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/ede-api-gateway:latest
