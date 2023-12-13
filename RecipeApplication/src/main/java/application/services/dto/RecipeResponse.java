@@ -1,10 +1,18 @@
 package application.services.dto;
 
+import application.services.model.RecipeIngredient;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -12,7 +20,14 @@ import java.util.List;
 @Data
 @Builder
 public class RecipeResponse {
-    private String recipeNumber;
-    private String userName;
-    private List<RecipeIngredientResponse> recipeIngredients;
+    private Long id;
+    private String name;
+    private Duration duration;
+    private String description;
+    private String instruction;
+    private String author;
+    private List<RecipeIngredientResponse> ingredients;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

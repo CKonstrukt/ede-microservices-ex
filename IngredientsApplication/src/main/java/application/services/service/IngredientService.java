@@ -2,6 +2,7 @@ package application.services.service;
 
 import application.services.dto.IngredientRequest;
 import application.services.dto.IngredientResponse;
+import application.services.exception.ResourceNotFoundException;
 import application.services.model.Ingredient;
 import application.services.repository.IngredientRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,24 +17,19 @@ public class IngredientService {
 
     public void create(IngredientRequest ingredientRequest) {
         Ingredient ingredient = Ingredient.builder()
-                .code(ingredientRequest.getCode())
                 .name(ingredientRequest.getName())
-                .calories(ingredientRequest.getCalories())
+                .units(ingredientRequest.getUnits())
                 .build();
 
         ingredientRepository.save(ingredient);
     }
 
-    public IngredientResponse getByCode(String code) {
-        Ingredient ingredient = ingredientRepository.findByCode(code);
+    public IngredientResponse getById(String id) {
+        Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Ingredient not found with id: " + id)
+        );
 
         return mapToIngredientResponse(ingredient);
-    }
-
-    public List<IngredientResponse> findAllByNameContains(String name) {
-        List<Ingredient> ingredients = ingredientRepository.findAllByNameContainsIgnoreCase(name.toLowerCase());
-
-        return ingredients.stream().map(this::mapToIngredientResponse).toList();
     }
 
     public List<IngredientResponse> getAll() {
@@ -42,16 +38,32 @@ public class IngredientService {
         return ingredients.stream().map(this::mapToIngredientResponse).toList();
     }
 
+    public IngredientResponse update(String id, IngredientRequest ingredientRequest) {
+        Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Ingredient not found with id: " + id)
+        );
+
+        ingredient.setName(ingredientRequest.getName());
+        ingredient.setUnits(ingredientRequest.getUnits());
+
+        ingredientRepository.save(ingredient);
+
+        return mapToIngredientResponse(ingredient);
+    }
+
     public void delete(String id) {
-        ingredientRepository.deleteById(id);
+        Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Ingredient not found with id: " + id)
+        );
+
+        ingredientRepository.delete(ingredient);
     }
 
     private IngredientResponse mapToIngredientResponse(Ingredient ingredient) {
         return IngredientResponse.builder()
                 .id(ingredient.getId())
-                .code(ingredient.getCode())
                 .name(ingredient.getName())
-                .calories(ingredient.getCalories())
+                .units(ingredient.getUnits())
                 .build();
     }
 }

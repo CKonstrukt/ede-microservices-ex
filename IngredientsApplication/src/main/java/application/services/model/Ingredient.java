@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(value = "ingredient")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 public class Ingredient {
     private String id;
-    private String code;
     private String name;
-    private Double calories;
+    private List<String> units;
 }

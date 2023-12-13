@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
-public class IngredientResponse {
+public class UserResponse {
     private String id;
-    private String name;
-    private List<String> units;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private List<String> favouriteRecipes;
 }

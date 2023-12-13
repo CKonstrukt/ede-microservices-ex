@@ -14,7 +14,7 @@ public class RecipeIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String code;
-    private Integer quantity;
+    private String ingredientId;
+    private Double quantity;
     private String unit;
 }

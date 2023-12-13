@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
 public class IngredientResponse {
     private String id;
-    private String code;
     private String name;
-    private Double calories;
+    private List<String> units;
 }
