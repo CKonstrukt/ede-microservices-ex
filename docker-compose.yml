@@ -51,18 +51,21 @@ services:
   recipe-service:
     depends_on:
       - postgres-recipe
+      - user-service
       - ingredient-service
     image: r0881427/recipe-service
     ports:
       - 8080:8080
     links:
       - postgres-recipe
+      - user-service
       - ingredient-service
     environment:
       DB_HOST: postgres-recipe
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: secret
+      USER_SERVICE_BASE_URL: user-service:8081
       INGREDIENT_SERVICE_BASE_URL: ingredient-service:8082
 
   api-gateway:
