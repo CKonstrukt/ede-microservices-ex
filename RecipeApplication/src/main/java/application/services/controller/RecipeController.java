@@ -26,8 +26,8 @@ public class RecipeController {
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RecipeResponse get(@PathVariable Long id) {
-        return recipeService.get(id);
+    public RecipeResponse getById(@PathVariable Long id) {
+        return recipeService.getById(id);
     }
 
     @GetMapping("user/{userId}")

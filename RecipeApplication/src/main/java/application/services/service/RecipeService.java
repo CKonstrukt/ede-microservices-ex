@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class RecipeService {
     @Value("${ingredientservice.baseurl}")
     private String ingredientServiceBaseUrl;
 
-    public UserResponse getUser(String id) {
+    private UserResponse getUser(String id) {
         return webClient.get()
                 .uri(String.format("http://%s/api/user/" + id, userServiceBaseUrl))
                 .retrieve()
@@ -42,7 +43,7 @@ public class RecipeService {
                 .block();
     }
 
-    public IngredientResponse getIngredient(String id) {
+    private IngredientResponse getIngredient(String id) {
         return webClient.get()
                 .uri(String.format("http://%s/api/ingredient/" + id, ingredientServiceBaseUrl))
                 .retrieve()
@@ -114,7 +115,7 @@ public class RecipeService {
         return mapToRecipeResponse(recipe, author);
     }
 
-    public RecipeResponse get(Long id) {
+    public RecipeResponse getById(Long id) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Recipe not found with id: " + id)
         );
@@ -142,13 +143,13 @@ public class RecipeService {
         recipe.setName(recipeRequest.getName());
         recipe.setDuration(recipeRequest.getDuration());
         recipe.setDescription(recipeRequest.getDescription());
+        recipe.setInstruction(recipeRequest.getInstruction());
 
         List<RecipeIngredient> recipeIngredients = recipeRequest.getIngredients().stream()
                 .map(this::mapToRecipeIngredient)
                 .toList();
 
-        recipe.getIngredients().clear();
-        recipe.getIngredients().addAll(recipeIngredients);
+        recipe.setIngredients(new ArrayList<>(recipeIngredients));
         recipeRepository.save(recipe);
 
         recipe.setUpdatedAt(LocalDateTime.now()); // The save doesn't return updated time for some reason
@@ -156,10 +157,10 @@ public class RecipeService {
     }
 
     public void delete(Long id) {
-        try {
-            recipeRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException("Recipe not found with id: " + id);
-        }
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Recipe not found with id: " + id)
+        );
+
+        recipeRepository.delete(recipe);
     }
 }

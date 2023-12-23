@@ -24,18 +24,18 @@ public class IngredientService {
         ingredientRepository.save(ingredient);
     }
 
+    public List<IngredientResponse> getAll() {
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+
+        return ingredients.stream().map(this::mapToIngredientResponse).toList();
+    }
+
     public IngredientResponse getById(String id) {
         Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Ingredient not found with id: " + id)
         );
 
         return mapToIngredientResponse(ingredient);
-    }
-
-    public List<IngredientResponse> getAll() {
-        List<Ingredient> ingredients = ingredientRepository.findAll();
-
-        return ingredients.stream().map(this::mapToIngredientResponse).toList();
     }
 
     public IngredientResponse update(String id, IngredientRequest ingredientRequest) {

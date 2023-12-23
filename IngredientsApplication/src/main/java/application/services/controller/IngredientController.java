@@ -23,16 +23,16 @@ public class IngredientController {
         ingredientService.create(ingredientRequest);
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public IngredientResponse getByCode(@PathVariable String id) {
-        return ingredientService.getById(id);
-    }
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<IngredientResponse> getAll() {
         return ingredientService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public IngredientResponse getByCode(@PathVariable String id) {
+        return ingredientService.getById(id);
     }
 
     @PutMapping("/{id}")
