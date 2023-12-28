@@ -18,14 +18,14 @@ jobs:
           distribution: adopt
 
       - name: Build, test and package project
-        working-directory: ./UserApplication
+        working-directory: ./backend/UserApplication
         run: mvn package -B
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/user-service:latest ./UserApplication
+        run: docker build -t ${{ secrets.DOCKER_USER }}/user-service:latest ./backend/UserApplication
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/user-service:latest
@@ -44,14 +44,14 @@ jobs:
           distribution: adopt
 
       - name: Build, test and package project
-        working-directory: ./IngredientsApplication
+        working-directory: ./backend/IngredientsApplication
         run: mvn package -B
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/ingredient-service:latest ./IngredientsApplication
+        run: docker build -t ${{ secrets.DOCKER_USER }}/ingredient-service:latest ./backend/IngredientsApplication
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/ingredient-service:latest
@@ -70,14 +70,14 @@ jobs:
           distribution: adopt
 
       - name: Build, test and package project
-        working-directory: ./RecipeApplication
+        working-directory: ./backend/RecipeApplication
         run: mvn package -B
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/recipe-service:latest ./RecipeApplication
+        run: docker build -t ${{ secrets.DOCKER_USER }}/recipe-service:latest ./backend/RecipeApplication
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/recipe-service:latest
@@ -96,14 +96,14 @@ jobs:
           distribution: adopt
 
       - name: Build, test and package project
-        working-directory: ./ApiGateway
+        working-directory: ./backend/ApiGateway
         run: mvn package -B -DskipTests
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} --build-arg GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} -t ${{ secrets.DOCKER_USER }}/api-gateway:latest ./ApiGateway
+        run: docker build --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} --build-arg GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} -t ${{ secrets.DOCKER_USER }}/api-gateway:latest ./backend/ApiGateway
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/api-gateway:latest
