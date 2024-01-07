@@ -20,7 +20,7 @@ email van de user bevat. Dan wordt er een request gemaakt naar `/api/user/email/
 ## Schema
 Hieronder het schema van de applicatie's backend. Zoals te zien is er maar 1 endpoint niet protected. Deze is de `POST /user` om een user te kunnen aanmaken. Er wordt gebruik gemaakt van 2 MongoDB en 1 Postgres databases.
 
-![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/a6c51645-0bef-47d5-b498-c366dbb42772)
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/3b92b8d4-cc19-4856-a462-a2a0fac12ac1)
 
 ## Testing van endpoints
 Sommige endpoints worden lokaal getest omdat deze niet beschikbaar zijn via Okteto Cloud (zie chapter over Nodeport).
@@ -29,19 +29,33 @@ Sommige endpoints worden lokaal getest omdat deze niet beschikbaar zijn via Okte
 #### POST => /user
 ![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/55a1a545-bb0f-481e-953f-c923de3ef674)
 
-#### GET => 
+#### GET => /user
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/4293aed4-542f-46fd-96e4-1652fd529d0b)
+
+#### GET => /user/{id}
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/ef31db8e-9411-44e5-b489-e4eda585e509)
+
+#### GET => /user/email/{email}
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/179efe43-39a6-4834-a03d-06f30b5f7b77)
+
+#### DELETE => /user/{id}
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/8c0359f4-c6ca-4398-98f4-3dca3de57349)
 
 ### Ingredient
 #### POST => /ingredient
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/6c11d2dd-6e57-4a1b-b26f-9a49afcebe99)
 
 #### GET => /ingredient
 ![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/fae1c888-524a-4ae8-a9d8-b615e1592089)
 
 #### GET => /ingredient/{id}
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/43347a79-ab1d-4399-b3a4-44ce8e15d0ca)
 
 #### PUT => /ingredient/{id}
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/9ac0b503-320c-4d1c-a4ca-69ba114c6105)
 
 #### DELETE => /ingredient/{id}
+![image](https://github.com/CKonstrukt/ede-microservices-ex/assets/91123727/dedcedd1-d507-48e9-81ef-55537590efd0)
 
 ### Recipe
 #### POST => /recipe
