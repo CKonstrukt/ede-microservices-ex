@@ -1,4 +1,5 @@
 # Chomp! - Enterprise Development Experience exercise
+[YouTube video](https://youtu.be/xda1ZilwEWY)
 [Chomp! (Frontend, Vercel)](https://ede-microservices-ex.vercel.app/)\
 [API Gateway (Okteto Cloud)](https://api-gateway-ckonstrukt.cloud.okteto.net)
 
