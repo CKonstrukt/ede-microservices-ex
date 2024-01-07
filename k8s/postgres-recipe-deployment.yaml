@@ -26,6 +26,8 @@ spec:
     spec:
       containers:
         - env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/db-files
             - name: POSTGRES_DB
               value: recipedb
             - name: POSTGRES_PASSWORD
@@ -36,7 +38,7 @@ spec:
             - containerPort: 5432
           resources: {}
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data/dbfiles
+            - mountPath: /var/lib/postgresql/data
               name: postgres-recipe-data
       restartPolicy: Always
       volumes:
