@@ -34,6 +34,7 @@ services:
     environment:
       DB_HOST: mongo-user
       DB_PORT: 27017
+      DB_NAME: userdb
 
   ingredient-service:
     depends_on:
@@ -46,6 +47,7 @@ services:
     environment:
       DB_HOST: mongo-ingredient
       DB_PORT: 27018
+      DB_NAME: ingredientdb
 
   recipe-service:
     depends_on:
@@ -62,8 +64,9 @@ services:
     environment:
       DB_HOST: postgres-recipe
       DB_PORT: 5432
+      DB_NAME: recipedb
       DB_USER: postgres
-      DB_PASSWORD: secret
+      DB_PASSWORD: recipe-passworD-@@@
       USER_SERVICE_BASE_URL: user-service:8081
       INGREDIENT_SERVICE_BASE_URL: ingredient-service:8082
 
