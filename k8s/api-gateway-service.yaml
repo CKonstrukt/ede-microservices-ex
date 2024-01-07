@@ -9,10 +9,12 @@ metadata:
     io.kompose.service: api-gateway
   name: api-gateway
 spec:
+  type: NodePort
   ports:
     - name: "8083"
       port: 8083
       targetPort: 8083
+      nodePort: 30000
   selector:
     io.kompose.service: api-gateway
 status:
