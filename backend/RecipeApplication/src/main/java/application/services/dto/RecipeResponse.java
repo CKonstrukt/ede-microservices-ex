@@ -23,10 +23,11 @@ public class RecipeResponse {
     private Long id;
     private String name;
     private Duration duration;
+    private Integer amountOfPeople;
     private String description;
-    private String instruction;
-    private String author;
+    private List<String> instructions;
     private List<RecipeIngredientResponse> ingredients;
+    private RecipeUserResponse user;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

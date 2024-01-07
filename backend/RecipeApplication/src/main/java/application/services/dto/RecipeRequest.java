@@ -15,8 +15,8 @@ import java.util.List;
 public class RecipeRequest {
     private String name;
     private Duration duration;
+    private Integer amountOfPeople;
     private String description;
-    private String instruction;
-    private String userId; // author of the recipe
+    private List<String> instructions;
     private List<RecipeIngredientRequest> ingredients;
 }

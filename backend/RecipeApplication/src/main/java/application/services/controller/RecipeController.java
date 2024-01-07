@@ -2,9 +2,11 @@ package application.services.controller;
 
 import application.services.dto.RecipeRequest;
 import application.services.dto.RecipeResponse;
+import application.services.exception.DelimiterInInstructionException;
 import application.services.exception.ResourceNotFoundException;
 import application.services.model.Recipe;
 import application.services.service.RecipeService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +22,14 @@ public class RecipeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RecipeResponse create(@RequestBody RecipeRequest recipeRequest) {
-        return recipeService.create(recipeRequest);
+    public RecipeResponse create(@RequestBody RecipeRequest recipeRequest, @RequestHeader("X-User-Email") String email) {
+        return recipeService.create(recipeRequest, email);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<RecipeResponse> getAll() {
+        return recipeService.getAll();
     }
 
     @GetMapping("{id}")
@@ -30,16 +38,16 @@ public class RecipeController {
         return recipeService.getById(id);
     }
 
-    @GetMapping("user/{userId}")
+    @GetMapping("me")
     @ResponseStatus(HttpStatus.OK)
-    public List<RecipeResponse> getAllForUser(@PathVariable String userId) {
-        return recipeService.getAllForUser(userId);
+    public List<RecipeResponse> getAllForUserSelf(@RequestHeader("X-User-Email") String email) {
+        return recipeService.getAllForUserSelf(email);
     }
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RecipeResponse update(@PathVariable Long id, @RequestBody RecipeRequest recipeRequest) {
-        return recipeService.update(id, recipeRequest);
+    public RecipeResponse update(@PathVariable Long id, @RequestBody RecipeRequest recipeRequest, @RequestHeader("X-User-Email") String email) {
+        return recipeService.update(id, recipeRequest, email);
     }
 
     @DeleteMapping("{id}")
@@ -51,5 +59,10 @@ public class RecipeController {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DelimiterInInstructionException.class)
+    public ResponseEntity<String> handleDelimiterInInstructionException(DelimiterInInstructionException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

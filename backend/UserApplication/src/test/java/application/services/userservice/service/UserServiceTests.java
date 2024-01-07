@@ -30,15 +30,18 @@ public class UserServiceTests {
         // Arrange
         UserRequest userRequest = UserRequest.builder()
                 .email("email")
-                .firstName("firstName")
-                .lastName("lastName")
-                .favouriteRecipes(List.of("recipe1", "recipe2"))
+                .name("name")
+                .image("image")
                 .build();
 
         // Act
-        userService.create(userRequest);
+        UserResponse user = userService.create(userRequest);
 
         // Assert
+        assertEquals("email", user.getEmail());
+        assertEquals("name", user.getName());
+        assertEquals("image", user.getImage());
+
         verify(userRepository, times(1)).save(any(User.class));
     }
 
@@ -47,16 +50,14 @@ public class UserServiceTests {
         // Arrange
         User user1 = User.builder()
                 .email("email1")
-                .firstName("firstName1")
-                .lastName("lastName1")
-                .favouriteRecipes(List.of("recipe1.1", "recipe1.2"))
+                .name("name1")
+                .image("image1")
                 .build();
 
         User user2 = User.builder()
                 .email("email2")
-                .firstName("firstName2")
-                .lastName("lastName2")
-                .favouriteRecipes(List.of("recipe2.1", "recipe2.2"))
+                .name("name2")
+                .image("image2")
                 .build();
         when(userRepository.findAll()).thenReturn(List.of(user1, user2));
 
@@ -66,17 +67,11 @@ public class UserServiceTests {
         // Assert
         assertEquals(2, users.size());
         assertEquals("email1", users.get(0).getEmail());
-        assertEquals("firstName1", users.get(0).getFirstName());
-        assertEquals("lastName1", users.get(0).getLastName());
-        assertEquals(2, users.get(0).getFavouriteRecipes().size());
-        assertEquals("recipe1.1", users.get(0).getFavouriteRecipes().get(0));
-        assertEquals("recipe1.2", users.get(0).getFavouriteRecipes().get(1));
+        assertEquals("name1", users.get(0).getName());
+        assertEquals("image1", users.get(0).getImage());
         assertEquals("email2", users.get(1).getEmail());
-        assertEquals("firstName2", users.get(1).getFirstName());
-        assertEquals("lastName2", users.get(1).getLastName());
-        assertEquals(2, users.get(1).getFavouriteRecipes().size());
-        assertEquals("recipe2.1", users.get(1).getFavouriteRecipes().get(0));
-        assertEquals("recipe2.2", users.get(1).getFavouriteRecipes().get(1));
+        assertEquals("name2", users.get(1).getName());
+        assertEquals("image2", users.get(1).getImage());
 
         verify(userRepository, times(1)).findAll();
     }
@@ -87,7 +82,7 @@ public class UserServiceTests {
         when(userRepository.findById("id")).thenReturn(java.util.Optional.empty());
 
         // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> userService.get("id"));
+        assertThrows(ResourceNotFoundException.class, () -> userService.getById("id"));
 
         verify(userRepository, times(1)).findById("id");
     }
@@ -97,62 +92,20 @@ public class UserServiceTests {
         // Arrange
         User user = User.builder()
                 .email("email")
-                .firstName("firstName")
-                .lastName("lastName")
-                .favouriteRecipes(List.of("recipe1", "recipe2"))
+                .name("name")
+                .image("image")
                 .build();
         when(userRepository.findById("id")).thenReturn(java.util.Optional.of(user));
 
         // Act
-        UserResponse userResponse = userService.get("id");
+        UserResponse userResponse = userService.getById("id");
 
         // Assert
         assertEquals("email", userResponse.getEmail());
-        assertEquals("firstName", userResponse.getFirstName());
-        assertEquals("lastName", userResponse.getLastName());
-        assertEquals(2, userResponse.getFavouriteRecipes().size());
-        assertEquals("recipe1", userResponse.getFavouriteRecipes().get(0));
-        assertEquals("recipe2", userResponse.getFavouriteRecipes().get(1));
+        assertEquals("name", userResponse.getName());
+        assertEquals("image", userResponse.getImage());
 
         verify(userRepository, times(1)).findById("id");
-    }
-
-    @Test
-    public void updateFavouriteRecipes_WithNonExistentId_ThrowsResourceNotFoundException() {
-        // Arrange
-        when(userRepository.findById("id")).thenReturn(java.util.Optional.empty());
-
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () ->
-                userService.updateFavouriteRecipes("id", List.of("recipe1", "recipe2")));
-
-        verify(userRepository, times(1)).findById("id");
-    }
-
-    @Test
-    public void updateFavouriteRecipes_WithValidRequest_UpdatesUser() {
-        // Arrange
-        User user = User.builder()
-                .email("email")
-                .firstName("firstName")
-                .lastName("lastName")
-                .favouriteRecipes(List.of("recipe1", "recipe2"))
-                .build();
-        when(userRepository.findById("id")).thenReturn(java.util.Optional.of(user));
-
-        // Act
-        UserResponse userResponse = userService.updateFavouriteRecipes("id", List.of("recipe3", "recipe4"));
-
-        // Assert
-        assertEquals("email", userResponse.getEmail());
-        assertEquals("firstName", userResponse.getFirstName());
-        assertEquals("lastName", userResponse.getLastName());
-        assertEquals(2, userResponse.getFavouriteRecipes().size());
-        assertEquals("recipe3", userResponse.getFavouriteRecipes().get(0));
-        assertEquals("recipe4", userResponse.getFavouriteRecipes().get(1));
-
-        verify(userRepository, times(1)).findById("id");
-        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
@@ -171,9 +124,8 @@ public class UserServiceTests {
         // Arrange
         User user = User.builder()
                 .email("email")
-                .firstName("firstName")
-                .lastName("lastName")
-                .favouriteRecipes(List.of("recipe1", "recipe2"))
+                .name("name")
+                .image("image")
                 .build();
         when(userRepository.findById("id")).thenReturn(java.util.Optional.of(user));
 

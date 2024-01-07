@@ -14,7 +14,7 @@ import java.util.List;
 public class UserResponse {
     private String id;
     private String email;
-    private String firstName;
-    private String lastName;
-    private List<String> favouriteRecipes;
+    private String name;
+    private String image;
+    private List<String> favouriteRecipeIds;
 }

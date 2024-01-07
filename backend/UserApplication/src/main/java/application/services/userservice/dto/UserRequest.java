@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 public class UserRequest {
     private String email;
-    private String firstName;
-    private String lastName;
-    private List<String> favouriteRecipes;
+    private String name;
+    private String image;
 }

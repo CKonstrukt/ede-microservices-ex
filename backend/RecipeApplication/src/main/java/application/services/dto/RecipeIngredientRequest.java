@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @Builder
 public class RecipeIngredientRequest {
-    private String ingredientId;
+    private String id;
     private Double quantity;
     private String unit;
 }

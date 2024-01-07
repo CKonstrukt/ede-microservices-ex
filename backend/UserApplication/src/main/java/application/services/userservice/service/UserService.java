@@ -6,33 +6,44 @@ import application.services.userservice.exception.ResourceNotFoundException;
 import application.services.userservice.model.User;
 import application.services.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
-    public void create(UserRequest userRequest) {
+    public UserResponse create(UserRequest userRequest) {
+        Optional<User> existingUser = userRepository.findByEmail(userRequest.getEmail());
+        if (existingUser.isPresent()) {
+            return mapToUserResponse(existingUser.get());
+        }
+
         User user = User.builder()
-                .googleId(UUID.randomUUID().toString()) // TODO: Replace with Google ID
                 .email(userRequest.getEmail())
-                .firstName(userRequest.getFirstName())
-                .lastName(userRequest.getLastName())
-                .favouriteRecipes(Collections.emptyList())
+                .name(userRequest.getName())
+                .image(userRequest.getImage())
                 .build();
 
         userRepository.save(user);
+
+        return mapToUserResponse(user);
     }
 
-    public UserResponse get(String id) {
+    public UserResponse getById(String id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User not found with id: " + id)
+        );
+
+        return mapToUserResponse(user);
+    }
+
+    public UserResponse getByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("User not found with email: " + email)
         );
 
         return mapToUserResponse(user);
@@ -42,17 +53,6 @@ public class UserService {
         List<User> users = userRepository.findAll();
 
         return users.stream().map(this::mapToUserResponse).toList();
-    }
-
-    public UserResponse updateFavouriteRecipes(String id, List<String> favouriteRecipes) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User not found with id: " + id)
-        );
-
-        user.setFavouriteRecipes(favouriteRecipes);
-        userRepository.save(user);
-
-        return mapToUserResponse(user);
     }
 
     public void delete(String id) {
@@ -67,9 +67,8 @@ public class UserService {
         return UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .favouriteRecipes(user.getFavouriteRecipes())
+                .name(user.getName())
+                .image(user.getImage())
                 .build();
     }
 }

@@ -24,11 +24,12 @@ public class Recipe {
     private Long id;
     private String name;
     private Duration duration;
+    private Integer amountOfPeople;
     private String description;
-    private String instruction;
-    private String userId; // author of recipe
+    private String instructions;
     @OneToMany(cascade = CascadeType.ALL)
     private List<RecipeIngredient> ingredients = new ArrayList<>();
+    private String userId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

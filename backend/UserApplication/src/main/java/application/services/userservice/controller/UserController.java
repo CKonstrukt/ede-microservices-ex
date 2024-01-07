@@ -19,8 +19,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody UserRequest userRequest) {
-        userService.create(userRequest);
+    public UserResponse create(@RequestBody UserRequest userRequest) {
+        return userService.create(userRequest);
     }
 
     @GetMapping
@@ -31,14 +31,14 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse get(@PathVariable String id) {
-        return userService.get(id);
+    public UserResponse getById(@PathVariable String id) {
+        return userService.getById(id);
     }
 
-    @PatchMapping("/{id}/favouriteRecipes")
+    @GetMapping("email/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse updateFavouriteRecipes(@PathVariable String id, @RequestBody List<String> favouriteRecipes) {
-        return userService.updateFavouriteRecipes(id, favouriteRecipes);
+    public UserResponse getByEmail(@PathVariable String email) {
+        return userService.getByEmail(email);
     }
 
     @DeleteMapping("/{id}")

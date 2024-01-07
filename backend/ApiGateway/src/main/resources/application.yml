@@ -31,37 +31,16 @@ spring:
           uri: http://${USER_SERVICE_BASEURL:localhost:8081}
           predicates:
             - Path=/user
-            - Method=POST,GET,DELETE
+            - Method=POST
           filters:
             - SetPath=/api/user
-        - id: user-id
-          uri: http://${USER_SERVICE_BASEURL:localhost:8081}
-          predicates:
-            - Path=/user/{id}
-            - Method=GET,DELETE
-          filters:
-            - SetPath=/api/user/{id}
-        - id: user-favouriteRecipes
-          uri: http://${USER_SERVICE_BASEURL:localhost:8081}
-          predicates:
-            - Path=/user/{id}/favouriteRecipes
-            - Method=PATCH
-          filters:
-            - SetPath=/api/user/{id}/favouriteRecipes
         - id: ingredient
           uri: http://${INGREDIENT_SERVICE_BASEURL:localhost:8082}
           predicates:
             - Path=/ingredient
-            - Method=POST,GET
+            - Method=GET
           filters:
             - SetPath=/api/ingredient
-        - id: ingredient-id
-          uri: http://${INGREDIENT_SERVICE_BASEURL:localhost:8082}
-          predicates:
-            - Path=/ingredient/{id}
-            - Method=GET,PUT,DELETE
-          filters:
-            - SetPath=/api/ingredient/{id}
         - id: recipe
           uri: http://${RECIPE_SERVICE_BASEURL:localhost:8080}
           predicates:
@@ -76,10 +55,10 @@ spring:
             - Method=GET,PUT,DELETE
           filters:
             - SetPath=/api/recipe/{id}
-        - id: recipe-for-user
+        - id: recipe-for-user-self
           uri: http://${RECIPE_SERVICE_BASEURL:localhost:8080}
           predicates:
-            - Path=/recipe/user/{userId}
+            - Path=/recipe/me
             - Method=GET
           filters:
-            - SetPath=/api/recipe/user/{userId}
+            - SetPath=/api/recipe/me

@@ -25,7 +25,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/user-service:latest ./backend/UserApplication
+        run: docker build --build-arg DB_NAME=${{ secrets.USER_DB_NAME }} -t ${{ secrets.DOCKER_USER }}/user-service:latest ./backend/UserApplication
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/user-service:latest
@@ -51,7 +51,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/ingredient-service:latest ./backend/IngredientsApplication
+        run: docker build  --build-arg DB_NAME=${{ secrets.INGREDIENT_DB_NAME }} -t ${{ secrets.DOCKER_USER }}/ingredient-service:latest ./backend/IngredientsApplication
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/ingredient-service:latest
@@ -77,7 +77,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/recipe-service:latest ./backend/RecipeApplication
+        run: docker build --build-arg DB_NAME=${{ secrets.RECIPE_DB_NAME }} --build-arg DB_USER=${{ secrets.RECIPE_DB_USER }} --build-arg=${{ secrets.RECIPE_DB_PASSWORD }} -t ${{ secrets.DOCKER_USER }}/recipe-service:latest ./backend/RecipeApplication
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/recipe-service:latest
