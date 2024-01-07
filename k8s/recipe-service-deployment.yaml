@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: recipe-service
+  name: recipe-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: recipe-service
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: recipe-service
+    spec:
+      containers:
+        - env:
+            - name: DB_HOST
+              value: postgres-recipe
+            - name: DB_NAME
+              value: recipedb
+            - name: DB_PASSWORD
+              value: recipe-passworD-@@@
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: postgres
+            - name: INGREDIENT_SERVICE_BASE_URL
+              value: ingredient-service:8082
+            - name: USER_SERVICE_BASE_URL
+              value: user-service:8081
+          image: r0881427/recipe-service
+          name: recipe-service
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}
