@@ -36,7 +36,7 @@ spec:
             - containerPort: 5432
           resources: {}
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
+            - mountPath: /var/lib/postgresql/data/dbfiles
               name: postgres-recipe-data
       restartPolicy: Always
       volumes:

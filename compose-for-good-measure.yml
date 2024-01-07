@@ -1,0 +1,95 @@
+version: "3"
+services:
+  mongo-user:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_user_data:/data/db
+
+  mongo-ingredient:
+    image: mongo:latest
+    ports:
+      - 27018:27017
+    volumes:
+      - mongodb_ingredient_data:/data/db
+
+  postgres-recipe:
+    image: postgres:16-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_recipe_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=recipe-passworD-@@@
+      - POSTGRES_DB=recipedb
+
+  user-service:
+    depends_on:
+      - mongo-user
+    image: r0881427/user-service
+    ports:
+      - 8081:8081
+    links:
+      - mongo-user
+    environment:
+      DB_HOST: mongo-user
+      DB_PORT: 27017
+      DB_NAME: userdb
+
+  ingredient-service:
+    depends_on:
+      - mongo-ingredient
+    image: r0881427/ingredient-service
+    ports:
+      - 8082:8082
+    links:
+      - mongo-ingredient
+    environment:
+      DB_HOST: mongo-ingredient
+      DB_PORT: 27018
+      DB_NAME: ingredientdb
+
+  recipe-service:
+    depends_on:
+      - postgres-recipe
+      - user-service
+      - ingredient-service
+    image: r0881427/recipe-service
+    ports:
+      - 8080:8080
+    links:
+      - postgres-recipe
+      - user-service
+      - ingredient-service
+    environment:
+      DB_HOST: postgres-recipe
+      DB_PORT: 5432
+      DB_NAME: recipedb
+      DB_USER: postgres
+      DB_PASSWORD: recipe-passworD-@@@
+      USER_SERVICE_BASE_URL: user-service:8081
+      INGREDIENT_SERVICE_BASE_URL: ingredient-service:8082
+
+  api-gateway:
+    depends_on:
+      - user-service
+      - ingredient-service
+      - recipe-service
+    image: r0881427/api-gateway
+    ports:
+      - 8083:8083
+    links:
+      - user-service
+      - ingredient-service
+      - recipe-service
+    environment:
+      USER_SERVICE_BASEURL: user-service:8081
+      INGREDIENT_SERVICE_BASEURL: ingredient-service:8082
+      RECIPE_SERVICE_BASEURL: recipe-service:8080
+
+volumes:
+  mongodb_user_data:
+  mongodb_ingredient_data:
+  postgres_recipe_data:
+
